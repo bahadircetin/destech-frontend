@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import React from 'react';
 // @mui
 import {
   Card,
@@ -21,7 +22,18 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  Dialog,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
 } from '@mui/material';
+
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+
 // components
 import Label from '../components/label';
 import Iconify from '../components/iconify';
@@ -34,11 +46,13 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+ // { id: 'id', label: 'Sevkiyat No', alignRight: false },
+  { id: 'name', label: 'Tır plaka', alignRight: false },
+  { id: 'startingPoint', label: 'Çıkış Yeri', alignRight: false },
+  { id: 'destinationPoint', label: 'Varış Yeri', alignRight: false },
+  { id: 'loadType', label: 'Yük Türü/Miktarı', alignRight: false },
+
+  { id: 'statu', label: 'Statu', alignRight: false },
   { id: '' },
 ];
 
@@ -59,6 +73,8 @@ function getComparator(order, orderBy) {
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
+
+
 
 function applySortFilter(array, comparator, query) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -87,6 +103,29 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [openPop, setOpenPop] = useState(false);
+
+const handleClickOpen = () => {
+  setOpenPop(true);
+};
+
+const handleClose = () => {
+  setOpenPop(false);
+};
+
+const [trackID, setTrackId] = useState('');
+const [startingPoint, setStartingPoint] = useState('');
+const [destinationPoint, setDestinationPoint] = useState('');
+const [loadType, setLoadType] = useState('');
+const [loadAmount, setLoadAmount] = useState('');
+
+const handleSubmit = (e) => {
+const reqBody = {trackID,startingPoint,destinationPoint,loadType,loadAmount}
+console.log(reqBody)
+
+}
+
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -146,6 +185,20 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+    const [ storages, setStorages ] = useState([]);
+ 
+  useEffect(() => {
+    console.log(USERLIST)
+    const fetchata = async () => {
+        const response = await fetch(
+          'http://10.185.0.79:8080/api/v1/storage');
+           const data = await response.json();
+           setStorages( data )
+    }
+     fetchata();
+ }, []);
+ console.log(storages)
+
   return (
     <>
       <Helmet>
@@ -155,11 +208,56 @@ export default function UserPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Sevkiyat Listesi
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
-          </Button>
+          <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Sevkiyat Oluştur
+      </Button>
+      <Dialog
+        open={openPop}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+     <Container>
+        <Stack direction="column" spacing = {2}sx={{
+    width: 400,
+    padding: 2,
+  }}>
+
+        <Typography variant="h4" component="h2" color="blue">
+             Sevkiyat Oluştur
+        </Typography >
+            <TextField id = "trackId" label="Tır Plaka" variant="outlined"  onChange={(e) => setTrackId(e.target.value)}/>
+            <TextField id = "startingPoint" label="Çıkış Yeri" variant="outlined" onChange={(e) => setStartingPoint(e.target.value)}/>
+            <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Varış Yeri</InputLabel>
+            <Select
+                labelId="demo-simple-select-label"
+                id="destinationPointSelect"
+
+                onChange={(e) => setDestinationPoint(e.target.value)}
+                label="Varış Yeri"            >
+                <MenuItem value={1}>Kızılay Ecza Deposu</MenuItem>
+                <MenuItem value={2}>KSÜ Ana Depo</MenuItem>
+                <MenuItem value={3}>AFAD Su Deposu</MenuItem>
+            </Select>
+            </FormControl>
+            <TextField id = "loadType" label="Yük Türü" variant="outlined" onChange={(e) => setLoadType(e.target.value)}/>
+            <TextField id = "loadAmount" label="Yük Miktarı" variant="outlined"  onChange={(e) => setLoadAmount(e.target.value)}/>
+
+
+            <Stack direction="column"   alignItems="flex-end" >     
+               <Button variant="outlined" onClick={handleSubmit}  >Oluştur</Button>
+            </Stack>
+
+        </Stack>
+
+
+</Container>
+      </Dialog>
+    </div>
         </Stack>
 
         <Card>
@@ -190,7 +288,6 @@ export default function UserPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
@@ -201,10 +298,10 @@ export default function UserPage() {
 
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">{isVerified}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'Yolda' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
@@ -281,13 +378,10 @@ export default function UserPage() {
       >
         <MenuItem>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
+          Düzenle
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+
       </Popover>
     </>
   );

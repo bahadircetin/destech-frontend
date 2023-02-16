@@ -2,25 +2,25 @@ import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
+const plaka = ['06 AB 2290','06 AB 2291','06 AB 2292','06 AB 2293','06 AB 2294']
 
-const users = [...Array(24)].map((_, index) => ({
+const users = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
-  name: faker.name.fullName(),
-  company: faker.company.name(),
-  isVerified: faker.datatype.boolean(),
-  status: sample(['active', 'banned']),
+  name: plaka[index],
+  company: sample([
+    'Havelsan Ankara',
+    'Havelsan İstabul',
+    'AFAD Ankara',
+
+  ]),
+  isVerified: sample(['Su 400Lt', 'Kuru Gıda 100Koli','Giyecek 150 koli']),
+  status: sample(['Yolda', 'Geldi']),
   role: sample([
-    'Leader',
-    'Hr Manager',
-    'UI Designer',
-    'UX Designer',
-    'UI/UX Designer',
-    'Project Manager',
-    'Backend Developer',
-    'Full Stack Designer',
-    'Front End Developer',
-    'Full Stack Developer',
+    'Maraş AFAD Depo',
+    'Maraş Kızılay Depo',
+    'ASKİ Erzak Depo',
+
   ]),
 }));
 
