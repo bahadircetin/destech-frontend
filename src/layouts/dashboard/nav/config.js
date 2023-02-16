@@ -36,6 +36,11 @@ const navConfig = [
     path: '/login',
     icon: icon('ic_lock'),
   },
+  {
+    title: 'Map',
+    path: '/dashboard/map',
+    icon: icon('ic_map'),
+  },
 ];
 
 export default navConfig;
