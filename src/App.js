@@ -1,7 +1,6 @@
 import './App.css';
 
-import DepoDisplay from './Views/DepoDisplay';
-import CircleIcon from '@mui/icons-material/Circle';
+import DeliveryCreate from './Views/DeliveryCreate';
 const data = [
   { id: 1,statu :'Acil', depoTuru:'Kuru Gıda', depoAdi: 'Merkez Kızılay', depoAddress: 'Merkez/K.Maraş'},
 
@@ -10,7 +9,7 @@ function App() {
   return (
     <div>
     
-      <DepoDisplay data={data}></DepoDisplay>
+      <DeliveryCreate ></DeliveryCreate>
     </div>
   );
 }
