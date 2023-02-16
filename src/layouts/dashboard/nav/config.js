@@ -16,16 +16,18 @@ const navConfig = [
     path: '/dashboard/user',
     icon: icon('ic_user'),
   },
+  
   {
     title: 'Depolar',
-    path: '/404',
-    icon: icon('ic_disabled'),
-  },
-  {
-    title: 'Kurtarma Personeli',
     path: '/dashboard/products',
     icon: icon('ic_cart'),
   },
+  {
+    title: 'Kurtarma Personeli',
+    path: '/dashboard/storage',
+    icon: icon('ic_lock'),
+  },
+
   {
     title: 'İş Makineleri',
     path: '/dashboard/blog',

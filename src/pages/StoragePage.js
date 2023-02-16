@@ -47,10 +47,10 @@ import USERLIST from '../_mock/user';
 
 const TABLE_HEAD = [
  // { id: 'id', label: 'Sevkiyat No', alignRight: false },
-  { id: 'name', label: 'Depo Adı', alignRight: false },
-  { id: 'startingPoint', label: 'Depo Türü', alignRight: false },
-  { id: 'destinationPoint', label: 'Depo Adres', alignRight: false },
-  { id: 'loadType', label: 'Depo Kapasitesi', alignRight: false },
+  { id: 'name', label: 'Tır plaka', alignRight: false },
+  { id: 'startingPoint', label: 'Çıkış Yeri', alignRight: false },
+  { id: 'destinationPoint', label: 'Varış Yeri', alignRight: false },
+  { id: 'loadType', label: 'Yük Türü/Miktarı', alignRight: false },
 
   { id: 'statu', label: 'Statu', alignRight: false },
   { id: '' },
@@ -89,7 +89,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ProductsPage() {
+export default function StoragePage() {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -208,9 +208,56 @@ console.log(reqBody)
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Depo Listesi
+            Sevkiyat Listesi
           </Typography>
+          <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Sevkiyat Oluştur
+      </Button>
+      <Dialog
+        open={openPop}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+     <Container>
+        <Stack direction="column" spacing = {2}sx={{
+    width: 400,
+    padding: 2,
+  }}>
 
+        <Typography variant="h4" component="h2" color="blue">
+             Sevkiyat Oluştur
+        </Typography >
+            <TextField id = "trackId" label="Tır Plaka" variant="outlined"  onChange={(e) => setTrackId(e.target.value)}/>
+            <TextField id = "startingPoint" label="Çıkış Yeri" variant="outlined" onChange={(e) => setStartingPoint(e.target.value)}/>
+            <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Varış Yeri</InputLabel>
+            <Select
+                labelId="demo-simple-select-label"
+                id="destinationPointSelect"
+
+                onChange={(e) => setDestinationPoint(e.target.value)}
+                label="Varış Yeri"            >
+                <MenuItem value={1}>Kızılay Ecza Deposu</MenuItem>
+                <MenuItem value={2}>KSÜ Ana Depo</MenuItem>
+                <MenuItem value={3}>AFAD Su Deposu</MenuItem>
+            </Select>
+            </FormControl>
+            <TextField id = "loadType" label="Yük Türü" variant="outlined" onChange={(e) => setLoadType(e.target.value)}/>
+            <TextField id = "loadAmount" label="Yük Miktarı" variant="outlined"  onChange={(e) => setLoadAmount(e.target.value)}/>
+
+
+            <Stack direction="column"   alignItems="flex-end" >     
+               <Button variant="outlined" onClick={handleSubmit}  >Oluştur</Button>
+            </Stack>
+
+        </Stack>
+
+
+</Container>
+      </Dialog>
+    </div>
         </Stack>
 
         <Card>
@@ -242,19 +289,19 @@ console.log(reqBody)
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="subtitle2" noWrap>
-                              {Boolean(Math.round(Math.random())) ? 'Maraş Merkez Depo': 'Elbistan AFAD Depo'} 
+                              {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{Boolean(Math.round(Math.random())) ? 'Kuru Gıda': 'Su'}</TableCell>
+                        <TableCell align="left">{company}</TableCell>
 
-                        <TableCell align="left">{Boolean(Math.round(Math.random())) ? 'Üngüt Mah. 32018.Sok': 'Doğukent Mah. 34.Sok'}</TableCell>
+                        <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{Boolean(Math.round(Math.random())) ? '%40':'%60'}</TableCell>
+                        <TableCell align="left">{isVerified}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={(status === 'Yolda' && 'error') || 'success'}>{sentenceCase(status=== 'Yolda' ? 'Acil': 'Normal')}</Label>
+                          <Label color={(status === 'Yolda' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">

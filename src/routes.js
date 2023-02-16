@@ -10,6 +10,7 @@ import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import MapPage from "./pages/MapPage";
+import StoragePage from './pages/StoragePage';
 
 // ----------------------------------------------------------------------
 
